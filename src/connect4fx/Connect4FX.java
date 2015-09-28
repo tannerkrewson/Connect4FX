@@ -1,43 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package connect4fx;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-/**
- *
- * @author KrewsonTanner08
- */
 public class Connect4FX extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
+        primaryStage.setTitle("Connect4FX");
+        Group root = new Group();
+        Canvas canvas = new Canvas(700, 700);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        drawBoard(gc);
+        root.getChildren().add(canvas);
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
@@ -46,6 +28,17 @@ public class Connect4FX extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private void drawBoard(GraphicsContext gc) {
+        gc.setFill(Color.YELLOW);
+        gc.fillRect(0, 100, 700, 600);
+        gc.setFill(Color.WHITE);
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
+                gc.fillOval((i*100), (j*100)+100, 100, 100);
+            }
+        }
     }
     
 }
