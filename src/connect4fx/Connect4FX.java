@@ -18,6 +18,7 @@ public class Connect4FX extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         Board main = new Board(80, gc);
         main.drawBoard();
+        boolean t = main.dropChip(0, 0, Color.RED);
         root.getChildren().add(canvas);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

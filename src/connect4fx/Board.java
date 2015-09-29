@@ -7,7 +7,7 @@ public class Board {
 
     private GraphicsContext gc;
     private int chipSize;
-    //private Chip[][] board = new int[7][6];
+    private BoardSpace[][] board = new BoardSpace[7][6];
 
     public Board(int cs) {
         chipSize = cs;
@@ -22,11 +22,11 @@ public class Board {
         //the instance of Board should have been created with a GraphicsContext
         //if we're going to be able to draw it.
         assert gc != null;
-        
+
         //yellow part of board
         gc.setFill(Color.YELLOW);
         gc.fillRect(0, 100, 700, 600);
-        
+
         //white circles
         gc.setFill(Color.WHITE);
         double cpm = chipPosModifier(100, chipSize);
@@ -35,6 +35,13 @@ public class Board {
                 gc.fillOval((i * 100) + cpm, (j * 100) + 100 + cpm, chipSize, chipSize);
             }
         }
+    }
+
+    public boolean dropChip(int x, int y, Color c) {
+        Chip tempChip = new Chip(x, y, Color.BLUE);
+        tempChip.drawChip(gc, chipPosModifier(100, chipSize));
+        board[x][y] = tempChip;
+        return true;
     }
 
     private double chipPosModifier(int length, int diameter) {
