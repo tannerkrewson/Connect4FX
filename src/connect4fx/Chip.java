@@ -1,6 +1,7 @@
 package connect4fx;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class Chip extends EmptyCircle {
@@ -19,11 +20,6 @@ public class Chip extends EmptyCircle {
         return color;
     }
 
-    public void draw(GraphicsContext gc, double cpm) {
-        gc.setFill(color);
-        gc.fillOval((xCoord * 100) + cpm, (yCoord * 100) + 100 + cpm, 80, 80);
-    }
-
     public int getXCoord() {
         return xCoord;
     }
@@ -40,6 +36,7 @@ public class Chip extends EmptyCircle {
         yCoord = y;
     }
     
+    @Override
     public boolean isChip(){
         return true;
     }

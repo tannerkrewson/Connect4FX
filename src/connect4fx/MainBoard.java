@@ -6,35 +6,42 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class MainBoard extends Board {
 
     private double canvasX, canvasY;
-    private Canvas can;
-    private GraphicsContext gc;
+    private Pane canvas;
 
     public MainBoard(int cs) {
         super(cs);
     }
 
-    public void createWindow(Stage primaryStage) {
-        primaryStage.setTitle("Connect4FX");
+    public void createWindow(Stage primaryStage, double xSize, double ySize) {
         Group root = new Group();
-        can = new Canvas(700, 700);
-        gc = can.getGraphicsContext2D();
-        canvasX = can.getWidth();
-        canvasY = can.getHeight();
-        root.getChildren().add(can);
-        primaryStage.setScene(new Scene(root));
+        canvasX = xSize;
+        canvasY = ySize;
+        Scene scene = new Scene(root, canvasX, canvasY);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Connect4FX");
+
+        canvas = new Pane();
+        canvas.setPrefSize(canvasX, canvasY);
+        VBox vb = new VBox();
+        vb.getChildren().add(canvas);
+        scene.setRoot(vb);
         primaryStage.show();
     }
 
     public void drawBoard() {
         //the instance of Board should have been created with a GraphicsContext
         //if we're going to be able to draw it.
-        assert gc != null;
+        assert canvas != null;
 
         //because we're assuming the chip boxes are sqaures
         assert canvasX == canvasY;
@@ -42,28 +49,30 @@ public class MainBoard extends Board {
         //width of a single square on the board
         double sw = canvasX / 7;
 
-        //yellow part of board
-        gc.setFill(Color.YELLOW);
-        //leave room for hovering chips
-        gc.fillRect(0, sw, canvasX, canvasY - sw);
+        //yellow part of board, leave room for hovering chips
+        Rectangle board = new Rectangle(0, 100, 700, 600);
+        board.setFill(Color.YELLOW);
+        canvas.getChildren().add(board);
 
         //white circles
-        gc.setFill(Color.WHITE);
-        double cpm = chipPosModifier(100, chipDiam);
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 6; j++) {
-                gc.fillOval(getChipXPos(i), getChipYPos(j), chipDiam, chipDiam);
+                canvas.getChildren().add(new Circle(getChipXPos(i), getChipYPos(j) + 100, chipDiam / 2, Color.WHITE));
             }
         }
     }
 
     @Override
     public void dropChip(Chip c) {
-        c.draw(gc, chipPosModifier(100, chipDiam));
+        draw(c);
+    }
+
+    public void draw(Chip c) {
+        canvas.getChildren().add(new Circle(c.getXCoord() * (canvasX / 7) + (canvasX / 14), c.getYCoord() * (canvasY / 7) + (canvasY / 14) + (canvasY / 7), chipDiam / 2, c.getColor()));
     }
 
     public void waitForUserToClick() {
-        can.addEventHandler(MouseEvent.MOUSE_CLICKED,
+        canvas.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent e) {
@@ -73,29 +82,29 @@ public class MainBoard extends Board {
     }
 
     public void enableHoverChip() {
-        HoverChip hoverChip = new HoverChip(0, 0, Color.PURPLE);
-        can.addEventHandler(MouseEvent.MOUSE_MOVED,
+        HoverChip hoverChip = new HoverChip(0, -1, Color.PURPLE);
+        canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent e) {
                         int mouseColumn = (int) (e.getX() / 100);
-                        if (hoverChip.getXCoord() != mouseColumn){
+                        if (hoverChip.getXCoord() != mouseColumn) {
+                            //draw white rect to remove previous hover chip
+                            Rectangle board = new Rectangle(0, 0, 700, 100);
+                            board.setFill(Color.WHITE);
+                            canvas.getChildren().add(board);
                             hoverChip.setXCoord(mouseColumn);
-                            hoverChip.draw(gc, chipPosModifier(canvasY / 7, chipDiam));
+                            draw(hoverChip);
                         }
                     }
                 });
     }
 
-    private double chipPosModifier(double length, int diameter) {
-        return (length - diameter) / 2;
-    }
-
     private double getChipXPos(int column) {
-        return (column * canvasX / 7) + chipPosModifier(canvasX / 7, chipDiam);
+        return (column * canvasX / 7) + canvasX / 14;
     }
 
     private double getChipYPos(int row) {
-        return (row * canvasY / 7) + chipPosModifier(canvasY / 7, chipDiam) + (canvasY / 7);
+        return (row * canvasY / 7) + canvasX / 14;
     }
 }

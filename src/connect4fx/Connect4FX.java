@@ -9,7 +9,7 @@ public class Connect4FX extends Application {
     @Override
     public void start(Stage primaryStage) {
         MainBoard main = new MainBoard(80);
-        main.createWindow(primaryStage);
+        main.createWindow(primaryStage, 700, 700);
         main.drawBoard();
         Chip toDrop = new Chip(0,0, Color.BLUE);
         main.dropChip(toDrop);
