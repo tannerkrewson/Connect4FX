@@ -59,7 +59,7 @@ public class MainBoard extends Board {
 
     @Override
     public void dropChip(Chip c) {
-        c.drawChip(gc, chipPosModifier(100, chipDiam));
+        c.draw(gc, chipPosModifier(100, chipDiam));
     }
 
     public void waitForUserToClick() {
@@ -81,7 +81,7 @@ public class MainBoard extends Board {
                         int mouseColumn = (int) (e.getX() / 100);
                         if (hoverChip.getXCoord() != mouseColumn){
                             hoverChip.setXCoord(mouseColumn);
-                            hoverChip.drawChip(gc, chipPosModifier(canvasY / 7, chipDiam));
+                            hoverChip.draw(gc, chipPosModifier(canvasY / 7, chipDiam));
                         }
                     }
                 });
