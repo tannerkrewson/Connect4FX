@@ -55,11 +55,9 @@ public class MainBoard extends Board {
         }
     }
 
-    public boolean dropChip(int x, int y, Color c) {
-        Chip tempChip = new Chip(x, y, c);
-        tempChip.drawChip(gc, chipPosModifier(100, chipDiam));
-        board[x][y] = tempChip;
-        return true;
+    @Override
+    public void dropChip(Chip c) {
+        c.drawChip(gc, chipPosModifier(100, chipDiam));
     }
 
     private double chipPosModifier(double length, int diameter) {

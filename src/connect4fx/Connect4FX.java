@@ -11,7 +11,8 @@ public class Connect4FX extends Application {
         MainBoard main = new MainBoard(80);
         main.createWindow(primaryStage);
         main.drawBoard();
-        boolean t = main.dropChip(0, 0, Color.RED);
+        Chip toDrop = new Chip(0,0, Color.BLUE);
+        main.dropChip(toDrop);
     }
 
     /**

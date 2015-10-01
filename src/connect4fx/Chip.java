@@ -23,4 +23,11 @@ public class Chip extends BoardSpace {
         gc.setFill(chipColor);
         gc.fillOval((xCoord * 100) + cpm, (yCoord * 100) + 100 + cpm, 80, 80);
     }
+    public int getXCoord(){
+        return xCoord;
+    }
+    
+    public int getYCoord(){
+        return yCoord;
+    }
 }
