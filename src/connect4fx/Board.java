@@ -1,7 +1,5 @@
 package connect4fx;
 
-import javafx.scene.paint.Color;
-
 public class Board {
 
     protected int chipDiam;

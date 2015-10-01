@@ -13,6 +13,8 @@ public class Connect4FX extends Application {
         main.drawBoard();
         Chip toDrop = new Chip(0,0, Color.BLUE);
         main.dropChip(toDrop);
+        main.waitForUserToClick();
+        main.enableHoverChip();
     }
 
     /**

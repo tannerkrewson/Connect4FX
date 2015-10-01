@@ -1,15 +1,18 @@
 package connect4fx;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class MainBoard extends Board {
 
     private double canvasX, canvasY;
+    private Canvas can;
     private GraphicsContext gc;
 
     public MainBoard(int cs) {
@@ -19,12 +22,11 @@ public class MainBoard extends Board {
     public void createWindow(Stage primaryStage) {
         primaryStage.setTitle("Connect4FX");
         Group root = new Group();
-        Canvas canvas = new Canvas(700, 700);
-        gc = canvas.getGraphicsContext2D();
-        Canvas temp = gc.getCanvas();
-        canvasX = temp.getWidth();
-        canvasY = temp.getHeight();
-        root.getChildren().add(canvas);
+        can = new Canvas(700, 700);
+        gc = can.getGraphicsContext2D();
+        canvasX = can.getWidth();
+        canvasY = can.getHeight();
+        root.getChildren().add(can);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
@@ -58,6 +60,31 @@ public class MainBoard extends Board {
     @Override
     public void dropChip(Chip c) {
         c.drawChip(gc, chipPosModifier(100, chipDiam));
+    }
+
+    public void waitForUserToClick() {
+        can.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        dropChip(new Chip((int) (e.getX() / 100), 0, Color.RED));
+                    }
+                });
+    }
+
+    public void enableHoverChip() {
+        HoverChip hoverChip = new HoverChip(0, 0, Color.PURPLE);
+        can.addEventHandler(MouseEvent.MOUSE_MOVED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        int mouseColumn = (int) (e.getX() / 100);
+                        if (hoverChip.getXCoord() != mouseColumn){
+                            hoverChip.setXCoord(mouseColumn);
+                            hoverChip.drawChip(gc, chipPosModifier(canvasY / 7, chipDiam));
+                        }
+                    }
+                });
     }
 
     private double chipPosModifier(double length, int diameter) {
