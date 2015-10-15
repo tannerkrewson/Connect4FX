@@ -9,7 +9,6 @@ public class HoverChip extends Chip {
         super(x, y, c);
     }
     
-    @Override
     public void draw(GraphicsContext gc, double cpm) {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, 700, 100);
