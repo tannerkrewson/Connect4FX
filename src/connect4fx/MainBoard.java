@@ -72,32 +72,46 @@ public class MainBoard extends Board {
     }
 
     public void waitForUserToClick() {
-        canvas.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent e) {
-                        dropChip(new Chip((int) (e.getX() / 100), 0, Color.RED));
-                    }
-                });
+        EventHandler eh = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                dropChip(new Chip((int) (e.getX() / 100), 0, Color.RED));
+                disableUserInput();
+                disableHoverChip();
+            }
+        };
+        canvas.setOnMouseClicked(eh);
+    }
+    
+    public void disableUserInput(){
+        canvas.setOnMouseClicked(null);
     }
 
     public void enableHoverChip() {
-        HoverChip hoverChip = new HoverChip(0, -1, Color.PURPLE);
-        canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
-                new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent e) {
-                        int mouseColumn = (int) (e.getX() / 100);
-                        if (hoverChip.getXCoord() != mouseColumn) {
-                            //draw white rect to remove previous hover chip
-                            Rectangle board = new Rectangle(0, 0, 700, 100);
-                            board.setFill(Color.WHITE);
-                            canvas.getChildren().add(board);
-                            hoverChip.setXCoord(mouseColumn);
-                            draw(hoverChip);
-                        }
-                    }
-                });
+        HoverChip hoverChip = new HoverChip(0, -1, this.currentTurnColor());
+        EventHandler eh = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                int mouseColumn = (int) (e.getX() / 100);
+                if (hoverChip.getXCoord() != mouseColumn) {
+                    //draw white rect to remove previous hover chip
+                    Rectangle board = new Rectangle(0, 0, 700, 100);
+                    board.setFill(Color.WHITE);
+                    canvas.getChildren().add(board);
+                    hoverChip.setXCoord(mouseColumn);
+                    draw(hoverChip);
+                }
+            }
+        };
+        canvas.setOnMouseMoved(eh);
+    }
+    
+    public void disableHoverChip(){
+        canvas.setOnMouseMoved(null);
+    }
+
+    public Color currentTurnColor() {
+        return Color.BLUE;
     }
 
     private double getChipXPos(int column) {
