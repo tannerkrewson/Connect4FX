@@ -65,6 +65,7 @@ public class MainBoard extends Board {
     @Override
     public void dropChip(Chip c) {
         draw(c);
+        super.dropChip(c);
     }
 
     public void draw(Chip c) {
