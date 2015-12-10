@@ -11,14 +11,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
-public class MainBoard extends Board {
+public class GUIBoard extends Board {
 
     private double canvasX, canvasY;
     private Pane canvas;
 
-    public MainBoard(int cs) {
+    public GUIBoard(int cs) {
         super(cs);
     }
 
@@ -50,9 +51,9 @@ public class MainBoard extends Board {
         double sw = canvasX / 7;
 
         //yellow part of board, leave room for hovering chips
-        Rectangle board = new Rectangle(0, 100, 700, 600);
-        board.setFill(Color.YELLOW);
-        canvas.getChildren().add(board);
+        Rectangle brd = new Rectangle(0, 100, 700, 600);
+        brd.setFill(Color.YELLOW);
+        canvas.getChildren().add(brd);
 
         //white circles
         for (int i = 0; i < 7; i++) {
@@ -62,21 +63,21 @@ public class MainBoard extends Board {
         }
     }
 
-    @Override
-    public void dropChip(Chip c) {
-        draw(c);
+    public void dropChip(GUIChip c) {
+        c.draw(this);
         super.dropChip(c);
     }
 
+    /*
     public void draw(Chip c) {
         canvas.getChildren().add(new Circle(c.getXCoord() * (canvasX / 7) + (canvasX / 14), c.getYCoord() * (canvasY / 7) + (canvasY / 14) + (canvasY / 7), chipDiam / 2, c.getColor()));
-    }
+    }*/
 
     public void waitForUserToClick() {
         EventHandler eh = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                dropChip(new Chip((int) (e.getX() / 100), 0, Color.RED));
+                dropChip(new GUIChip((int) (e.getX() / 100), 0, Color.RED));
                 disableUserInput();
                 disableHoverChip();
             }
@@ -89,7 +90,8 @@ public class MainBoard extends Board {
     }
 
     public void enableHoverChip() {
-        HoverChip hoverChip = new HoverChip(0, -1, this.currentTurnColor());
+        GUIChip hoverChip = new GUIChip(0, -1, this.currentTurnColor());
+        GUIBoard tempBoard = this;
         EventHandler eh = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -100,7 +102,7 @@ public class MainBoard extends Board {
                     board.setFill(Color.WHITE);
                     canvas.getChildren().add(board);
                     hoverChip.setXCoord(mouseColumn);
-                    draw(hoverChip);
+                    hoverChip.draw(tempBoard);
                 }
             }
         };
@@ -121,5 +123,17 @@ public class MainBoard extends Board {
 
     private double getChipYPos(int row) {
         return (row * canvasY / 7) + canvasX / 14;
+    }
+    
+    public double getCanvasX(){
+        return canvasX;
+    }
+    
+    public double getCanvasY(){
+        return canvasY;
+    }
+    
+    public void addToCanvas(Shape s){
+        canvas.getChildren().add(s);
     }
 }

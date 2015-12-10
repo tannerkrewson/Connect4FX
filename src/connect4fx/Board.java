@@ -16,4 +16,8 @@ public class Board {
     protected void addChipToArray(Chip c) {
         board[c.getXCoord()][c.getYCoord()] = c;
     }
+    
+    public int getChipDiam() {
+        return chipDiam;
+    }
 }
