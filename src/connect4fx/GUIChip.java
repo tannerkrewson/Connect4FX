@@ -23,4 +23,10 @@ public class GUIChip extends Chip {
        cir = new Circle(this.getXCoord() * (b.getCanvasX() / 7) + (b.getCanvasX() / 14), this.getYCoord() * (b.getCanvasY() / 7) + (b.getCanvasY() / 14) + (b.getCanvasY() / 7), b.getChipDiam() / 2, this.getColor());
        b.addToCanvas(cir);
     }
+    
+    public void move(int x, int y, GUIBoard b) {
+        assert cir != null;
+        cir.setCenterX(cir.getCenterX() + x);
+        cir.setCenterY(cir.getCenterY() + y);
+    }
 }

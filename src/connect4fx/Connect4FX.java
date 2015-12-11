@@ -11,8 +11,17 @@ public class Connect4FX extends Application {
         GUIBoard main = new GUIBoard(80);
         main.createWindow(primaryStage, 700, 700);
         main.drawBoard();
-        Chip toDrop = new GUIChip(0,0, Color.BLUE);
+        GUIChip toDrop = new GUIChip(2,0, Color.BLUE);
         main.dropChip(toDrop);
+        //toDrop.move(x, y, main);
+        int i = 0;
+        do
+        { toDrop.move(0,1, main);
+            i++;
+        }
+        while (i<100);
+        
+        
         main.waitForUserToClick();
         main.enableHoverChip();
     }
